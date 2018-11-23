@@ -1,17 +1,21 @@
 {
-  "name": "vue-forum",
+  "name": "vueschool-forum",
   "version": "1.0.0",
-  "description": "A Vue.js forum project",
-  "author": "Lee Cox",
+  "description": "Awesome full blown mega madness forum",
+  "author": "Alex Kyriakidis <hootlex@icloud.com>",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "npm run dev",
     "build": "node build/build.js",
-    "lint": "eslint --ext .js,.vue src"
+    "lint": "eslint --ext .js,.vue src",
+    "db:seed": "firebase database:set / src/data.json -y"
   },
   "dependencies": {
+    "dotenv": "^5.0.1",
+    "firebase": "^4.12.1",
     "moment": "^2.19.3",
+    "nprogress": "^0.2.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
