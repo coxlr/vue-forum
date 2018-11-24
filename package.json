@@ -1,8 +1,8 @@
 {
-  "name": "vueschool-forum",
+  "name": "vue-forum",
   "version": "1.0.0",
-  "description": "Awesome full blown mega madness forum",
-  "author": "Alex Kyriakidis <hootlex@icloud.com>",
+  "description": "A Vue.js forum project",
+  "author": "Lee Cox <leercox121@gmail.com>",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",

@@ -1,4 +1,5 @@
 import firebase from 'firebase'
+import {removeEmptyProperties} from '@/utils'
 
 export default {
   createPost ({commit, state}, post) {
@@ -19,6 +20,26 @@ export default {
         commit('appendPostToUser', {parentId: post.userId, childId: postId})
         return Promise.resolve(state.posts[postId])
       })
+  },
+
+  initAuthentication ({dispatch, commit, state}) {
+    return new Promise((resolve, reject) => {
+      // unsubscribe observer if already listening
+      if (state.unsubscribeAuthObserver) {
+        state.unsubscribeAuthObserver()
+      }
+
+      const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+        console.log('👣 the user has changed')
+        if (user) {
+          dispatch('fetchAuthUser')
+            .then(dbUser => resolve(dbUser))
+        } else {
+          resolve(null)
+        }
+      })
+      commit('setUnsubscribeAuthObserver', unsubscribe)
+    })
   },
 
   createThread ({state, commit, dispatch}, {text, title, forumId}) {
@@ -144,7 +165,22 @@ export default {
   },
 
   updateUser ({commit}, user) {
-    commit('setUser', {userId: user['.key'], user})
+    const updates = {
+      avatar: user.avatar,
+      username: user.username,
+      name: user.name,
+      bio: user.bio,
+      website: user.website,
+      email: user.email,
+      location: user.location
+    }
+    return new Promise((resolve, reject) => {
+      firebase.database().ref('users').child(user['.key']).update(removeEmptyProperties(updates))
+        .then(() => {
+          commit('setUser', {userId: user['.key'], user})
+          resolve(user)
+        })
+    })
   },
 
   fetchAuthUser ({dispatch, commit}) {
